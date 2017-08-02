@@ -17,7 +17,20 @@ public class Login {
     private String username;
     private String password;
 
-    private Trainer trainer;
+    Login() {}
+
+    Login( String password,String username) {
+        this.username = username;
+        this.password = password;
+    }
+
+    Login(String password, String username, Long id) {
+        this.username = username;
+        this.password = password;
+        this.id = id;
+    }
+
+    //private Trainer trainer;
 
     public Long getId() {
         return id;
@@ -42,7 +55,7 @@ public class Login {
     public void setPassword(String password) {
         this.password = password;
     }
-
+/*
     public Trainer getTrainer() {
         return trainer;
     }
@@ -50,4 +63,5 @@ public class Login {
     public void setTrainer(Trainer trainer) {
         this.trainer = trainer;
     }
+    */
 }

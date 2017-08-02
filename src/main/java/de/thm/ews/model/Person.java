@@ -12,6 +12,7 @@ public class Person {
     @Id
     private Long id;
 
+
     private String vorname;
     private String nachname;
     private Date gebDatum;
@@ -65,5 +66,6 @@ public class Person {
     public void setGebOrt(String gebOrt) {
         this.gebOrt = gebOrt;
     }
+
 
 }
