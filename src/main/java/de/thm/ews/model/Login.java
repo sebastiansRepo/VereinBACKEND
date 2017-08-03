@@ -1,9 +1,6 @@
 package de.thm.ews.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 /**
  * Created by sebb9 on 13.06.2017.
@@ -24,12 +21,12 @@ public class Login {
 
     }
 
-    public Login(String password, String username) {
+    public Login(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    public Login(String password, String username, Long id) {
+    public Login(Long id, String username, String password) {
         this.username = username;
         this.password = password;
         this.id = id;
