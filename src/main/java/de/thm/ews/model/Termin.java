@@ -1,8 +1,6 @@
 package de.thm.ews.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +11,11 @@ public class Termin {
     private Long id;
 
     private Date datum;
+
+    @OneToOne
     private Trainer trainer;
+
+    @OneToMany
     private List<Mitglied> mitgliederAnwesend;
 
     public Long getId() {
@@ -47,4 +49,5 @@ public class Termin {
     public void setMitgliederAnwesend(List<Mitglied> mitgliederAnwesend) {
         this.mitgliederAnwesend = mitgliederAnwesend;
     }
+
 }

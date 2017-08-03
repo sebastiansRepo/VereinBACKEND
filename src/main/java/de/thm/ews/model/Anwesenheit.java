@@ -3,8 +3,7 @@ package de.thm.ews.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Date;
-import java.util.List;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Anwesenheit {
@@ -12,6 +11,7 @@ public class Anwesenheit {
     @Id
     private Long id;
 
+    @OneToOne
     private Mitglied mitglied;
 
     public Long getId() {
@@ -29,4 +29,5 @@ public class Anwesenheit {
     public void setMitglied(Mitglied mitglied) {
         this.mitglied = mitglied;
     }
+
 }

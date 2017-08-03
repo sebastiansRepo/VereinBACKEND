@@ -10,11 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
-/**
- * Created by sebb9 on 13.06.2017.
- */
 @Stateless
 @Path("login")
 @Produces({MediaType.APPLICATION_JSON})

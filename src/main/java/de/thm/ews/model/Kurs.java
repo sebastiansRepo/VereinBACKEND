@@ -1,10 +1,9 @@
 package de.thm.ews.model;
 
-import javafx.util.Pair;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Entity
@@ -13,8 +12,12 @@ public class Kurs {
     @Id
     private Long id;
 
+    @OneToMany
     private List<Termin> termine;
+
     private String name;
+
+    @OneToMany
     private List<Mitglied> mitgliederAngemeldet;
 
     public Long getId() {
@@ -48,4 +51,5 @@ public class Kurs {
     public void setMitgliederAngemeldet(List<Mitglied> mitgliederAngemeldet) {
         this.mitgliederAngemeldet = mitgliederAngemeldet;
     }
+
 }
