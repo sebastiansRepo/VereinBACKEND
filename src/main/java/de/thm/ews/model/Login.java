@@ -3,6 +3,7 @@ package de.thm.ews.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  * Created by sebb9 on 13.06.2017.
@@ -16,21 +17,24 @@ public class Login {
 
     private String username;
     private String password;
+    @OneToOne
+    private Trainer trainer;
 
-    Login() {}
+    public Login() {
 
-    Login( String password,String username) {
+    }
+
+    public Login(String password, String username) {
         this.username = username;
         this.password = password;
     }
 
-    Login(String password, String username, Long id) {
+    public Login(String password, String username, Long id) {
         this.username = username;
         this.password = password;
         this.id = id;
     }
 
-    //private Trainer trainer;
 
     public Long getId() {
         return id;
@@ -55,7 +59,7 @@ public class Login {
     public void setPassword(String password) {
         this.password = password;
     }
-/*
+
     public Trainer getTrainer() {
         return trainer;
     }
@@ -63,5 +67,4 @@ public class Login {
     public void setTrainer(Trainer trainer) {
         this.trainer = trainer;
     }
-    */
 }

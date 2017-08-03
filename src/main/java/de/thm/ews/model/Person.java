@@ -1,13 +1,11 @@
 package de.thm.ews.model;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class Person {
+
     @GeneratedValue
     @Id
     private Long id;
@@ -18,6 +16,8 @@ public class Person {
     private Date gebDatum;
     private Date trittAusDatum;
     private String gebOrt;
+    @Enumerated(EnumType.STRING)
+    private Geschlecht geschlecht;
 
     public Long getId() {
         return id;
@@ -65,6 +65,14 @@ public class Person {
 
     public void setGebOrt(String gebOrt) {
         this.gebOrt = gebOrt;
+    }
+
+    public Geschlecht getGeschlecht() {
+        return geschlecht;
+    }
+
+    public void setGeschlecht(Geschlecht geschlecht) {
+        this.geschlecht = geschlecht;
     }
 
 

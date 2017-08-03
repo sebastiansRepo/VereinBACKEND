@@ -2,9 +2,7 @@ package de.thm.ews.model;
 
 import javafx.util.Pair;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -13,8 +11,12 @@ public class Kurs {
     @Id
     private Long id;
 
+    @OneToMany(cascade = CascadeType.ALL) //if course would be removed, remove all related "Termine"
     private List<Termin> termine;
+
     private String name;
+
+    @OneToMany
     private List<Mitglied> mitgliederAngemeldet;
 
     public Long getId() {

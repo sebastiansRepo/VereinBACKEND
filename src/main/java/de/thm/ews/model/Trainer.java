@@ -1,13 +1,15 @@
 package de.thm.ews.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Trainer extends Person  {
+public class Trainer extends Person {
 
+    @OneToOne
     private Login login;
+
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Kurs> kurse;
 
     public List<Kurs> getKurse() {
