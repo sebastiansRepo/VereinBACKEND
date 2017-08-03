@@ -49,4 +49,5 @@ public class Termin {
     public void setMitgliederAnwesend(List<Mitglied> mitgliederAnwesend) {
         this.mitgliederAnwesend = mitgliederAnwesend;
     }
+
 }
