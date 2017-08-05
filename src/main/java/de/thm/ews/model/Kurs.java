@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 public class Kurs {
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 

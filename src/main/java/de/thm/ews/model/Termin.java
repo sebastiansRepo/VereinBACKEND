@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 public class Termin {
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
