@@ -8,12 +8,12 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-//@Stateless
-//@Path("trainer")
-//@Produces({MediaType.APPLICATION_JSON})
-//@Consumes({MediaType.APPLICATION_JSON})
+@Stateless
+@Path("trainer")
+@Produces({MediaType.APPLICATION_JSON})
+@Consumes({MediaType.APPLICATION_JSON})
 public class TrainerService {
-/*
+
     @PersistenceContext
     private EntityManager em;
 
@@ -38,6 +38,5 @@ public class TrainerService {
         }
         return null;
     }
-*/
 
 }

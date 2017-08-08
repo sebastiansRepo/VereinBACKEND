@@ -1,7 +1,5 @@
 package de.thm.ews.model;
 
-import javafx.util.Pair;
-
 import javax.persistence.*;
 import java.util.List;
 
