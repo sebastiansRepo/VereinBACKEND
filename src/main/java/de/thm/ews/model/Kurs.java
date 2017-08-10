@@ -1,7 +1,12 @@
 package de.thm.ews.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Kurs {
@@ -9,13 +14,18 @@ public class Kurs {
     @Id
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL) //if course would be removed, remove all related "Termine"
+    @OneToMany(fetch = FetchType.EAGER ,cascade = CascadeType.ALL) //if course would be removed, remove all related "Termine"
     private List<Termin> termine;
 
     private String name;
 
-    @OneToMany
-    private List<Mitglied> mitgliederAngemeldet;
+    @ManyToMany(mappedBy = "kurse")
+    @JsonIgnore
+    private Set<Trainer> trainer;
+
+    @ManyToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Set<Mitglied> mitgliederAngemeldet;
 
     public Long getId() {
         return id;
@@ -41,11 +51,19 @@ public class Kurs {
         this.name = name;
     }
 
-    public List<Mitglied> getMitgliederAngemeldet() {
+    public Set<Mitglied> getMitgliederAngemeldet() {
         return mitgliederAngemeldet;
     }
 
-    public void setMitgliederAngemeldet(List<Mitglied> mitgliederAngemeldet) {
+    public void setMitgliederAngemeldet(Set<Mitglied> mitgliederAngemeldet) {
         this.mitgliederAngemeldet = mitgliederAngemeldet;
+    }
+
+    public Set<Trainer> getTrainer() {
+        return trainer;
+    }
+
+    public void setTrainer(Set<Trainer> trainer) {
+        this.trainer = trainer;
     }
 }

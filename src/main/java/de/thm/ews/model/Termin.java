@@ -2,7 +2,7 @@ package de.thm.ews.model;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Termin {
@@ -12,11 +12,11 @@ public class Termin {
 
     private Date datum;
 
-    @OneToOne
-    private Trainer trainer;
+//    @ManyToOne
+//    private Trainer trainer;
 
-    @OneToMany
-    private List<Mitglied> mitgliederAnwesend;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Mitglied> mitgliederAnwesend;
 
     public Long getId() {
         return id;
@@ -34,19 +34,19 @@ public class Termin {
         this.datum = datum;
     }
 
-    public Trainer getTrainer() {
-        return trainer;
-    }
+//    public Trainer getTrainer() {
+//        return trainer;
+//    }
 
-    public void setTrainer(Trainer trainer) {
-        this.trainer = trainer;
-    }
+//    public void setTrainer(Trainer trainer) {
+//        this.trainer = trainer;
+//    }
 
-    public List<Mitglied> getMitgliederAnwesend() {
+    public Set<Mitglied> getMitgliederAnwesend() {
         return mitgliederAnwesend;
     }
 
-    public void setMitgliederAnwesend(List<Mitglied> mitgliederAnwesend) {
+    public void setMitgliederAnwesend(Set<Mitglied> mitgliederAnwesend) {
         this.mitgliederAnwesend = mitgliederAnwesend;
     }
 

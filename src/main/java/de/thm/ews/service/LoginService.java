@@ -1,8 +1,6 @@
 package de.thm.ews.service;
 
 import de.thm.ews.model.Login;
-import de.thm.ews.model.Person;
-import jdk.nashorn.internal.parser.JSONParser;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -57,27 +55,10 @@ public class LoginService {
     @Path("/auth")
     @POST
     public Login authenticate(Login login) {
-        TypedQuery<Login> query = em.createQuery(
-                "SELECT l FROM Login l WHERE l.username = " + login.getUsername(),
-                Login.class
-        );
 
-        //workaround
-        boolean searching = true;
-        Long index = 1l;
-        Login entry = null;
-        while(searching) {
-            entry = em.find(Login.class, index);
-            if(entry != null) {
-                if(entry.getUsername().equals(login.getUsername()) && entry.getPassword().equals(login.getPassword())) {
-                    return entry;
-                }
-            } else {
-                searching = false;
-            }
-            index ++;
-        }
-        return null;
+        TypedQuery<Login> query = em.createQuery("SELECT l FROM Login l WHERE l.username = :name AND l.password = :password", Login.class);
+
+        return query.setParameter("name", login.getUsername()).setParameter("password", login.getPassword()).getSingleResult();
     }
 
 }

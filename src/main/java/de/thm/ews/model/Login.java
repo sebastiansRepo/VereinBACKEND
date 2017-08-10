@@ -14,7 +14,7 @@ public class Login {
 
     private String username;
     private String password;
-    @OneToOne
+    @OneToOne(mappedBy = "login")
     private Trainer trainer;
 
     public Login() {
