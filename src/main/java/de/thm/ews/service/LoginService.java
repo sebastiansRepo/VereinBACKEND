@@ -27,19 +27,19 @@ public class LoginService {
 
     @Path("{id}")
     @GET
-    public Login read(@PathParam("id")Long id){
+    public Login read(@PathParam("id") Long id){
         return em.find(Login.class, id);
     }
 
-    @PUT
     @Path("{id}")
+    @PUT
     public Login update(@PathParam("id") Long id, Login login) {
         em.merge(login);
-        return login;
+        return login; //maybe 'return read(id)' to prove it has been updated
     }
 
-    @DELETE
     @Path("{id}")
+    @DELETE
     public Login delete(@PathParam("id") Long id) {
         Login login = em.find(Login.class, id);
 
@@ -50,7 +50,6 @@ public class LoginService {
 
         return null;
     }
-
 
     @Path("/auth")
     @POST
