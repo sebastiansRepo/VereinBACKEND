@@ -13,4 +13,8 @@ public class Mitglied extends Person{
     @JsonIgnore
     private Set<Kurs> kurse;
 
+    @ManyToMany(mappedBy = "mitgliederAnwesend")
+    @JsonIgnore
+    private Set<Termin> termine;
+
 }

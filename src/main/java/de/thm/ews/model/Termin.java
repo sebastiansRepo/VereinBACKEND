@@ -15,7 +15,7 @@ public class Termin {
 //    @ManyToOne
 //    private Trainer trainer;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Mitglied> mitgliederAnwesend;
 
     public Long getId() {
