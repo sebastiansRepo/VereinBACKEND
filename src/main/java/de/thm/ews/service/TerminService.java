@@ -23,16 +23,15 @@ public class TerminService {
         return em.find(Termin.class, id);
     }
 
-    @Path("{id}")
-    @PUT
-    public Termin update(@PathParam("id") Long id, Termin termin) {
+    @POST
+    public Termin update(Termin termin) {
         em.merge(termin);
         return termin;
     }
 
     @Path("{id}")
     @DELETE
-    public Termin update(@PathParam("id") Long id) {
+    public Termin delete(@PathParam("id") Long id) {
         Termin termin = em.find(Termin.class, id);
 
         if(termin != null) {
