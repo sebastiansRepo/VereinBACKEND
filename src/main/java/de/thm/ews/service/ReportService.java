@@ -71,9 +71,9 @@ public class ReportService {
     @GET
     public Report createReportForKurs(@PathParam("id") Long id) {
         String allReports =
-                getFirstReportContent(id)  + "\n" +
-                        getSecondReportContent(id) + "\n" +
-                        getThirdReportContent(id)  + "\n";
+                getFirstReportContent(id)  + " <br> " +
+                        getSecondReportContent(id) + " <br> "  +
+                        getThirdReportContent(id)  + " <br> ";
         return new Report(allReports);
     }
 
@@ -91,7 +91,7 @@ public class ReportService {
 
         Double percent = (anzahlAngemeldeteMitgliederAnwesend).doubleValue() / (anzahlAngemeldet.doubleValue() * anzahlVergangeneTermineFuerKurs.doubleValue()) * 100;
 
-        return "" + new BigDecimal(percent,new MathContext(4)) + "%";
+        return "Percentage of registered Members appearing to their courses: " + new BigDecimal(percent,new MathContext(4)) + "%";
     }
 
     private String getSecondReportContent(Long kursId) {
@@ -120,7 +120,7 @@ public class ReportService {
         Double percentWomen = (anzahlAngemeldeteMitgliederAnwesendW).doubleValue() / (anzahlAngemeldetW.doubleValue() * anzahlVergangeneTermineFuerKursW.doubleValue()) * 100;
 
 
-        return "" + new BigDecimal(percentMen,new MathContext(4)) + "% Men " + new BigDecimal(percentWomen,new MathContext(4)) + "% Women" ;
+        return "Percentage of registered male Members appearing to their courses: " + new BigDecimal(percentMen,new MathContext(4)) + "% <br> Percentage of registered female Members appearing to their courses: " + new BigDecimal(percentWomen,new MathContext(4)) + "%" ;
     }
 
     private String getThirdReportContent(Long kursId) {
