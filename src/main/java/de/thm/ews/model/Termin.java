@@ -12,9 +12,6 @@ public class Termin {
 
     private Date datum;
 
-//    @ManyToOne
-//    private Trainer trainer;
-
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Mitglied> mitgliederAnwesend;
 
@@ -33,14 +30,6 @@ public class Termin {
     public void setDatum(Date datum) {
         this.datum = datum;
     }
-
-//    public Trainer getTrainer() {
-//        return trainer;
-//    }
-
-//    public void setTrainer(Trainer trainer) {
-//        this.trainer = trainer;
-//    }
 
     public Set<Mitglied> getMitgliederAnwesend() {
         return mitgliederAnwesend;
