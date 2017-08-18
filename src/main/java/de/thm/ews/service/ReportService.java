@@ -1,7 +1,6 @@
 package de.thm.ews.service;
 
 import de.thm.ews.model.Geschlecht;
-import de.thm.ews.model.Mitglied;
 import de.thm.ews.model.Report;
 
 import javax.ejb.Stateless;
@@ -71,9 +70,17 @@ public class ReportService {
     @GET
     public Report createReportForKurs(@PathParam("id") Long id) {
         String allReports =
-                getFirstReportContent(id)  + " <br> " +
-                        getSecondReportContent(id) + " <br> "  +
-                        getThirdReportContent(id)  + " <br> ";
+                        getFirstReportContent(id)  + " <br><br> " +
+
+                        getSecondReportContent(id) + " <br><br> "  +
+
+                        getThirdReportContent(id, 10, 25)  + " <br><br> " +
+                        getThirdReportContent(id, 26, 35)  + " <br><br> " +
+                        getThirdReportContent(id, 36, 50)  + " <br><br>" +
+                        getThirdReportContent(id, 51, 70)  + " <br><br> " +
+                        getThirdReportContent(id, 71, 99)  + " <br><br> " +
+
+                        getFourthReportContent(id);
         return new Report(allReports);
     }
 
@@ -91,7 +98,7 @@ public class ReportService {
 
         Double percent = (anzahlAngemeldeteMitgliederAnwesend).doubleValue() / (anzahlAngemeldet.doubleValue() * anzahlVergangeneTermineFuerKurs.doubleValue()) * 100;
 
-        return "Percentage of registered Members appearing to their courses: " + new BigDecimal(percent,new MathContext(4)) + "%";
+        return "Percentage of registered Members appearing to the course: " + new BigDecimal(percent,new MathContext(4)) + "%";
     }
 
     private String getSecondReportContent(Long kursId) {
@@ -120,29 +127,59 @@ public class ReportService {
         Double percentWomen = (anzahlAngemeldeteMitgliederAnwesendW).doubleValue() / (anzahlAngemeldetW.doubleValue() * anzahlVergangeneTermineFuerKursW.doubleValue()) * 100;
 
 
-        return "Percentage of registered male Members appearing to their courses: " + new BigDecimal(percentMen,new MathContext(4)) + "% <br> Percentage of registered female Members appearing to their courses: " + new BigDecimal(percentWomen,new MathContext(4)) + "%" ;
+        return "Percentage of registered male Members appearing to the course: " + new BigDecimal(percentMen,new MathContext(4)) + "% <br><br> Percentage of registered female Members appearing to the course: " + new BigDecimal(percentWomen,new MathContext(4)) + "%" ;
     }
 
-    private String getThirdReportContent(Long kursId) {
+    private String getThirdReportContent(Long kursId, Integer startDate, Integer endDate) {
 
-        //TODO - noch Fehler vorhanden!
+        TypedQuery<Long> query1 = em.createQuery("select count(anwesend) from Kurs k, IN (k.termine) t, IN (t.mitgliederAnwesend) anwesend WHERE k.id = :id AND (YEAR(current_date) - YEAR(anwesend.gebDatum) BETWEEN :startDate AND :endDate) AND anwesend MEMBER OF k.mitgliederAngemeldet", Long.class);
+        Long anzahlAngemeldeteMitgliederAnwesend = query1.setParameter("id", kursId).setParameter("startDate", startDate).setParameter("endDate", endDate).getSingleResult();
 
-        TypedQuery<Mitglied> q = em.createQuery("select anwesend from Kurs k, IN (k.termine) t, IN (t.mitgliederAnwesend) anwesend WHERE k.id = :id AND anwesend MEMBER OF k.mitgliederAngemeldet", Mitglied.class);
-            q.setParameter("id", kursId);
-
-        TypedQuery<Double> query1 = em.createQuery("select CURRENT_DATE - anwesend.gebDatum from Kurs k, IN (k.termine) t, IN (t.mitgliederAnwesend) anwesend WHERE k.id = :id  AND anwesend MEMBER OF k.mitgliederAngemeldet", Double.class);
-//        Long anzahlAngemeldeteMitgliederAnwesend = query1.setParameter("id", kursId).getSingleResult();
-
-        TypedQuery<Long> query2 = em.createQuery("select count(m) from Kurs k, IN (k.mitgliederAngemeldet) m WHERE k.id = ?1 AND (CURRENT_DATE - m.gebDatum) between :startAlterGruppe AND :endeAltersGruppe", Long.class);
-        Long anzahlAngemeldet =  query2.setParameter(1, kursId).setParameter("startAlterGruppe", 10d).setParameter("endeAltersGruppe", 25d).getSingleResult();
+        TypedQuery<Long> query2 = em.createQuery("select count(m) from Kurs k, IN (k.mitgliederAngemeldet) m WHERE k.id = ?1 AND (YEAR(current_date) - YEAR(m.gebDatum) BETWEEN :startDate AND :endDate)", Long.class);
+        Long anzahlAngemeldet =  query2.setParameter(1, kursId).setParameter("startDate", startDate).setParameter("endDate", endDate).getSingleResult();
 
         TypedQuery<Long> query3 = em.createQuery("select count(t) from Kurs k, IN (k.termine) t WHERE t.datum < CURRENT_DATE AND k.id = :id", Long.class);
         Long anzahlVergangeneTermineFuerKurs = query3.setParameter("id", kursId).getSingleResult();
 
-//        Double percent = (anzahlAngemeldeteMitgliederAnwesend).doubleValue() / (anzahlAngemeldet.doubleValue() * anzahlVergangeneTermineFuerKurs.doubleValue()) * 100;
+        Double percent = (anzahlAngemeldeteMitgliederAnwesend).doubleValue() / (anzahlAngemeldet.doubleValue() * anzahlVergangeneTermineFuerKurs.doubleValue()) * 100;
 
-        return "" + new BigDecimal(12,new MathContext(4)) + "%";
+        if (percent.isInfinite() || percent.isNaN()) {
+            return "Percentage of registered Members, between " + startDate + " and " + endDate +" ages, appearing to the course: no members in this age span" ;
+        } else {
+            return "Percentage of registered Members, between " + startDate + " and " + endDate +" ages, appearing to the course: " + new BigDecimal(percent,new MathContext(4)) + "%";
+        }
 
+    }
+
+    private String getFourthReportContent(Long kursId) {
+
+        TypedQuery<Long> query2 = em.createQuery("select count(m) from Kurs k, IN (k.mitgliederAngemeldet) m WHERE k.id = ?1", Long.class);
+        Long anzahlAngemeldet =  query2.setParameter(1, kursId).getSingleResult();
+
+        TypedQuery<Long> query2M = em.createQuery("select count(m) from Kurs k, IN (k.mitgliederAngemeldet) m WHERE k.id = ?1 AND m.geschlecht = :geschlecht", Long.class);
+        Long anzahlAngemeldetM =  query2M.setParameter(1, kursId).setParameter("geschlecht", Geschlecht.MAENNLICH).getSingleResult();
+
+        TypedQuery<Long> query2W = em.createQuery("select count(m) from Kurs k, IN (k.mitgliederAngemeldet) m WHERE k.id = ?1 AND m.geschlecht = :geschlecht", Long.class);
+        Long anzahlAngemeldetW =  query2W.setParameter(1, kursId).setParameter("geschlecht", Geschlecht.WEIBLICH).getSingleResult();
+
+
+        Double percentMale = (anzahlAngemeldetM).doubleValue() / (anzahlAngemeldet.doubleValue()) * 100;
+        Double percentFemale = (anzahlAngemeldetW).doubleValue() / (anzahlAngemeldet.doubleValue()) * 100;
+
+        String result = "";
+
+        if (!percentMale.isNaN() || !percentMale.isInfinite()) {
+            result += "Percentage of male Members: " + (new BigDecimal(percentMale,new MathContext(4))) + "%";
+        }
+
+        if (!percentFemale.isNaN() || !percentFemale.isInfinite()) {
+            if(result.equals("")) {
+                result += "Percentage of female Members: " + (new BigDecimal(percentFemale,new MathContext(4))) + "%";
+            } else {
+                result += " <br><br> Percentage of female Members: " + (new BigDecimal(percentFemale,new MathContext(4))) + "%";
+            }
+        }
+        return result;
     }
 
 }
