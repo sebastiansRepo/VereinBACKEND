@@ -21,51 +21,6 @@ public class ReportService {
     @PersistenceContext
     private EntityManager em;
 
-
-    @Path("trainer/{id}")
-    @GET
-    public Report createReportForTrainer(@PathParam("id") Long id) {
-        //check if id 0= root User
-        if (id ==  1) {
-            //TODO - die ID wird aktuell als Kurs-ID verwendet!
-
-            //zeigt alle Termine für den speziellen Kurs an
-//            TypedQuery<Termin> test = em.createQuery("select t from Kurs k, IN (k.termine) t WHERE k.name = :kursName", Termin.class);
-//            test.setParameter("kursName", "Karate");
-
-            //zeigt alle Mitglider an, die an den Terminen des Kurses anwesend waren
-//            TypedQuery<Mitglied> test = em.createQuery("select anwesend from Kurs k, IN (k.termine) t, IN (t.mitgliederAnwesend) anwesend WHERE k.name = :kursName ", Mitglied.class);
-//            test.setParameter("kursName", "Karate");
-
-            //zeigt alle Mitglieder an, die an den Terminen des Kurses anwesend waren und auch am Kurs angemeldet waren!
-//            TypedQuery<Mitglied> query1 = em.createQuery("select anwesend from Kurs k, IN (k.termine) t, IN (t.mitgliederAnwesend) anwesend WHERE k.id = :id AND anwesend MEMBER OF k.mitgliederAngemeldet", Mitglied.class);
-//            query1.setParameter("id", id);
-
-            TypedQuery<Long> query1 = em.createQuery("select count(anwesend) from Kurs k, IN (k.termine) t, IN (t.mitgliederAnwesend) anwesend WHERE k.id = :id AND anwesend MEMBER OF k.mitgliederAngemeldet", Long.class);
-            Long anzahlAngemeldeteMitgliederAnwesend = query1.setParameter("id", id).getSingleResult();
-
-            TypedQuery<Long> query2 = em.createQuery("select count(m) from Kurs k, IN (k.mitgliederAngemeldet) m WHERE k.id = ?1", Long.class);
-            Long anzahlAngemeldet =  query2.setParameter(1, id).getSingleResult();
-
-            TypedQuery<Long> query3 = em.createQuery("select count(t) from Kurs k, IN (k.termine) t WHERE t.datum < CURRENT_DATE AND k.id = :id", Long.class);
-            Long anzahlVergangeneTermineFuerKurs = query3.setParameter("id", id).getSingleResult();
-
-//            17 / 4(Anzahl Leute die angemeldet sind) * 6 (#Anzahl Termine die schon gewesen sind)
-
-            Double percent = (anzahlAngemeldeteMitgliederAnwesend).doubleValue() / (anzahlAngemeldet.doubleValue() * anzahlVergangeneTermineFuerKurs.doubleValue()) * 100;
-
-            System.out.println();
-
-
-        } else {
-            //special report only for the given trainer
-
-        }
-
-        return null;
-
-    }
-
     @Path("kurs/{id}")
     @GET
     public Report createReportForKurs(@PathParam("id") Long id) {
