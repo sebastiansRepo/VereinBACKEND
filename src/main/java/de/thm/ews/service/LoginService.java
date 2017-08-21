@@ -56,8 +56,12 @@ public class LoginService {
     public Login authenticate(Login login) {
 
         TypedQuery<Login> query = em.createQuery("SELECT l FROM Login l WHERE l.username = :name AND l.password = :password", Login.class);
-
-        return query.setParameter("name", login.getUsername()).setParameter("password", login.getPassword()).getSingleResult();
+        try {
+            return query.setParameter("name", login.getUsername()).setParameter("password", login.getPassword()).getSingleResult();
+        } catch(Exception e) {
+            System.out.println(e);
+            return null;
+        }
     }
 
 }
