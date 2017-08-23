@@ -21,6 +21,11 @@ public class ReportService {
     @PersistenceContext
     private EntityManager em;
 
+    /**
+     * Wird aufgerufen, wenn eine komplette Statistik zu einem Kurs gefragt ist.
+     * @param id des Kurses, zu dem die Statistik erstellt werden soll
+     * @return Report mit der Statistik
+     */
     @Path("kurs/{id}")
     @GET
     public Report createReportForKurs(@PathParam("id") Long id) {
@@ -40,6 +45,12 @@ public class ReportService {
     }
 
 
+    /**
+     * Wird verwendet von 'createReportForKurs' und gibt Auskunft über:
+     * - Prozentsatz, mit dem angemeldete Mitglieder zu ihren Kursen erscheinen
+     * @param kursId id des Kurses
+     * @return String, der die Statistik enthält
+     */
     private String getFirstReportContent(Long kursId) {
 
         TypedQuery<Long> query1 = em.createQuery("select count(anwesend) from Kurs k, IN (k.termine) t, IN (t.mitgliederAnwesend) anwesend WHERE k.id = :id AND anwesend MEMBER OF k.mitgliederAngemeldet", Long.class);
@@ -56,6 +67,13 @@ public class ReportService {
         return "Percentage of registered Members appearing to the course: " + new BigDecimal(percent,new MathContext(4)) + "%";
     }
 
+    /**
+     * Wird verwendet von 'createReportForKurs' und gibt Auskunft über:
+     * - Prozentsatz, mit dem angemeldete, männliche Mitglieder zu ihren Kursen erscheinen
+     * - Prozentsatz, mit dem angemeldete, weibliche Mitglieder zu ihren Kursen erscheinen
+     * @param kursId id des Kurses
+     * @return String, der die Statistik enthält
+     */
     private String getSecondReportContent(Long kursId) {
 
         //for men
@@ -85,6 +103,14 @@ public class ReportService {
         return "Percentage of registered male Members appearing to the course: " + new BigDecimal(percentMen,new MathContext(4)) + "% <br><br> Percentage of registered female Members appearing to the course: " + new BigDecimal(percentWomen,new MathContext(4)) + "%" ;
     }
 
+    /**
+     * Wird verwendet von 'createReportForKurs' und gibt Auskunft über:
+     * - Prozentsatz, mit dem angemeldete Mitglieder, zwischen startDate und endDate Jahren, zu ihren Kursen erscheinen
+     * @param kursId id des Kurses
+     * @param startDate Anfang der Altersspanne
+     * @param endDate Ende der Altersspanne
+     * @return String, der die Statistik enthält
+     */
     private String getThirdReportContent(Long kursId, Integer startDate, Integer endDate) {
 
         TypedQuery<Long> query1 = em.createQuery("select count(anwesend) from Kurs k, IN (k.termine) t, IN (t.mitgliederAnwesend) anwesend WHERE k.id = :id AND (YEAR(current_date) - YEAR(anwesend.gebDatum) BETWEEN :startDate AND :endDate) AND anwesend MEMBER OF k.mitgliederAngemeldet", Long.class);
@@ -106,6 +132,12 @@ public class ReportService {
 
     }
 
+    /**
+     * Wird verwendet von 'createReportForKurs' und gibt Auskunft über:
+     * -
+     * @param kursId id des Kurses
+     * @return String, der die Statistik enthält
+     */
     private String getFourthReportContent(Long kursId) {
 
         TypedQuery<Long> query2 = em.createQuery("select count(m) from Kurs k, IN (k.mitgliederAngemeldet) m WHERE k.id = ?1", Long.class);

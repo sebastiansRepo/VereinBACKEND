@@ -17,18 +17,34 @@ public class TerminService {
     @PersistenceContext
     private EntityManager em;
 
+    /**
+     * Liefert Termin Objekt zur passenden id
+     * @param id des gewünschten Termin Objekts
+     * @return Termin mit der id
+     */
     @Path("{id}")
     @GET
     public Termin read(@PathParam("id") Long id) {
         return em.find(Termin.class, id);
     }
 
+    /**
+     * Wird verwendet, um einen neuen Termin anzulegen.
+     * @param termin Objekt, welches persistiert werden soll
+     * @return persistiertes Termin Objekt
+     */
     @POST
     public Termin update(Termin termin) {
         em.merge(termin);
         return termin;
     }
 
+    /**
+     * Wird verwendet, um ein Termin Objekt zu löschen
+     * @param id des Termin Objekts
+     * @return Falls ein Objekt gelöscht wurde : das gelöschte Objekt
+     *         sonst : null
+     */
     @Path("{id}")
     @DELETE
     public Termin delete(@PathParam("id") Long id) {
