@@ -10,6 +10,7 @@ import java.util.Set;
 
 @Entity
 public class Kurs {
+    // ID
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
